@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
+
+
+  <gazebo>
+    <plugin name="gazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
+      <updateRate>100</updateRate>
+      <bodyName>base_footprint</bodyName>
+      <topicName>exact_pose</topicName>
+      <frameName>map</frameName>
+    </plugin>
+  </gazebo>
+
+
+
+  <gazebo reference="left_wheel">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <fdir1>0 0 1</fdir1>
+    <minDepth>0.005</minDepth>
+    <kp>1e8</kp>
+  </gazebo>
+  <gazebo reference="right_wheel">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <fdir1>0 0 1</fdir1>
+    <minDepth>0.005</minDepth>
+    <kp>1e8</kp>
+  </gazebo>
+
+  <!--Lidar sensor plugin -->
+
+  <gazebo reference="rplidar_link">
+    <sensor type="ray" name="rplidar_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.1416</min_angle>
+            <max_angle>3.1416</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.20</min>
+          <max>12.0</max>
+          <resolution>0.09</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <!-- Gazebo-ROS interface plugin -->
+      <plugin name="rplidar_controller" filename="libgazebo_ros_laser.so">
+        <topicName>/scan</topicName>
+        <frameName>rplidar_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+</robot>
